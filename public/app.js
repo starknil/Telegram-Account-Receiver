@@ -21,7 +21,6 @@ const showPage = (showPage) => {
   showPage.style.display = "block";
 };
 
-
 const renderAccounts = async (type) => {
   accountsUl.innerHTML = "";
   historyLoader.classList.remove("hidden");
@@ -36,14 +35,22 @@ const renderAccounts = async (type) => {
   if (!accounts || accounts.length === 0) return;
 
   for (const acct of accounts) {
-    const { id, contact: c, amount, timeStamp, isCompleted, accountStatus } = acct;
-  
-    const contact = `${c.toString().startsWith("+") ? '':'+'}${c}`;
+    const {
+      id,
+      contact: c,
+      amount,
+      timeStamp,
+      isCompleted,
+      accountStatus,
+    } = acct;
+
+    const contact = `${c.toString().startsWith("+") ? "" : "+"}${c}`;
     acct.contact = contact;
 
     let timeRemaining = Math.floor(
       (new Date(new Date(timeStamp * 1000).getTime() + 60 * 60 * 24 * 1000) -
-        new Date()) / 1000
+        new Date()) /
+        1000
     );
 
     if (timeRemaining <= 0) {
@@ -178,7 +185,7 @@ const showAccount = (obj) => {
   }
 
   const stateHouse = {
-    pending: (t1, t2, t3, t4) =>  `
+    pending: (t1, t2, t3, t4) => `
 <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-start gap-4">
   <div class="h-12 w-12 rounded-2xl bg-amber-50 flex items-center justify-center shrink-0">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-amber-500">
@@ -228,10 +235,11 @@ const showAccount = (obj) => {
     <p class="text-xs text-slate-400 mt-1">${t4}</p>
   </div>
 </div>
-`
-}
-  const { id, contact, amount, isCompleted, accountStatus, accountStatusText } = obj;
-  
+`,
+  };
+  const { id, contact, amount, isCompleted, accountStatus, accountStatusText } =
+    obj;
+
   const div = `
     <main class="flex min-h-screen flex-col bg-[#f8fafc] font-sans antialiased text-slate-900">
 
@@ -263,15 +271,59 @@ const showAccount = (obj) => {
             <div class="absolute -bottom-1 -right-1 bg-emerald-500 border-2 border-white h-5 w-5 rounded-full"></div>
           </div>
           <h2 class="text-xl font-black text-slate-800">${contact}</h2>
-          <p class="text-sm font-bold text-indigo-500 mt-1">${amount == 0 ? amount.toFixed(2) : amount} USDT</p>
+          <p class="text-sm font-bold text-indigo-500 mt-1">${
+            amount == 0 ? amount.toFixed(2) : amount
+          } USDT</p>
           <p class="text-[10px] font-mono text-slate-400 mt-2 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">ID: ${id}</p>
         </div>
 
         <div class="grid gap-4">
 
-        ${isCompleted === "pending" ? stateHouse.pending("Acceptance Status", "Pending", "Account is pending for validation","Usually takes 6-12 hours") : isCompleted === "accepted" ? stateHouse.completed("Acceptance Status", "Accepted", "Account accepted", `${amount} USDT has been added to your balance.`) : stateHouse.bad("Acceptance Status", "Rejected", "Account is rejected", "Unfortunately, this account has been rejected.")}
+        ${
+          isCompleted === "pending"
+            ? stateHouse.pending(
+                "Acceptance Status",
+                "Pending",
+                "Account is pending for validation",
+                "Usually takes 6-12 hours"
+              )
+            : isCompleted === "accepted"
+            ? stateHouse.completed(
+                "Acceptance Status",
+                "Accepted",
+                "Account accepted",
+                `${amount} USDT has been added to your balance.`
+              )
+            : stateHouse.bad(
+                "Acceptance Status",
+                "Rejected",
+                "Account is rejected",
+                "Unfortunately, this account has been rejected."
+              )
+        }
         
-        ${accountStatus === "pending" ? stateHouse.pending("Limit Status", "Pending", "Account is awaiting status checks","Usually takes 1-6 hours") : accountStatus === "free" ? stateHouse.completed("Limit Status", "Free", "No account restrictions", "Account is free and ready for use") : stateHouse.bad("Limit Status", "Limited", "Account is limited", accountStatusText)}
+        ${
+          accountStatus === "pending"
+            ? stateHouse.pending(
+                "Limit Status",
+                "Pending",
+                "Account is awaiting status checks",
+                "Usually takes 1-6 hours"
+              )
+            : accountStatus === "free"
+            ? stateHouse.completed(
+                "Limit Status",
+                "Free",
+                "No account restrictions",
+                "Account is free and ready for use"
+              )
+            : stateHouse.bad(
+                "Limit Status",
+                "Limited",
+                "Account is limited",
+                accountStatusText
+              )
+        }
 
         </div>
 
@@ -283,9 +335,12 @@ const showAccount = (obj) => {
   accountPage.style.display = "block";
 };
 
-const renderId = (id, content, type) => document.getElementById(id)[ type ? type : 'innerHTML'] = content;
-const renderClass = (className, content, type) => document.querySelectorAll(`.${className}`).forEach(el => el
-  [ type ? type : 'innerHTML'] = content);
+const renderId = (id, content, type) =>
+  (document.getElementById(id)[type ? type : "innerHTML"] = content);
+const renderClass = (className, content, type) =>
+  document
+    .querySelectorAll(`.${className}`)
+    .forEach((el) => (el[type ? type : "innerHTML"] = content));
 
 const mainButtonFunc = async () => {
   if (window.__c === 0) {
@@ -296,81 +351,87 @@ const mainButtonFunc = async () => {
   }
   if (window.__c === 1) {
     mainButton.showProgress();
-    
+
     const input = document.querySelector("#phone");
     const phoneNumber = input.value.trim();
     const err = document.querySelector("#phone-error");
     const errText = document.querySelector("#phone-error-text");
 
-    if (!phoneNumber || phoneNumber === "" || phoneNumber.length < 11 || phoneNumber.length > 15 || isNaN(phoneNumber)){
+    if (
+      !phoneNumber ||
+      phoneNumber === "" ||
+      phoneNumber.length < 11 ||
+      phoneNumber.length > 15 ||
+      isNaN(phoneNumber)
+    ) {
       errText.innerHTML = "Invalid phne number";
       err.classList.remove("hidden");
       mainButton.hideProgress();
       return;
-    };
+    }
     err.classList.add("hidden");
     const response = await fetch(`/get-code?phone=${phoneNumber}`);
     mainButton.hideProgress();
-    
+
     if (!response.ok) {
       errText.innerHTML = "An error occured. Try again later!";
       err.classList.remove("hidden");
       return;
-    };
+    }
     const data = await response.json();
     if (!data.success || !data.req_id) {
       errText.innerHTML = data.error;
       err.classList.remove("hidden");
       return;
-    };
+    }
     window.__code_id = data.req_id;
     input.value = "";
-    document.getElementById('display-phone').innerHTML = '+'+phoneNumber;
+    document.getElementById("display-phone").innerHTML = "+" + phoneNumber;
     mainButton.hideProgress();
     showPage(codePage);
     window.__c += 1;
     return;
-  };
+  }
   if (window.__c === 2) {
     mainButton.showProgress();
-const input = document.querySelector("#code");
-const code = input.value.trim();
-const err = document.querySelector("#code-error");
-if (!code || code === "" || code.length != 5 || isNaN(code)){
-  err.innerHTML = "Please enter a valid OTP code";
-  err.classList.remove("hidden");
-  mainButton.hideProgress();
-  return;
-};
-err.classList.add("hidden");
-const response = await fetch(`/verify-code`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    req_id: window.__code_id,
-    code
-  })
-});
-mainButton.hideProgress();
-if (!response.ok) {
-  err.innerHTML = "An error occured. Try again later!";
-  err.classList.remove("hidden");
-  return;
-};
-const data = await response.json();
-if (!data.success) {
-  err.innerHTML = data.error;
-  err.classList.remove("hidden");
-  return;
-};
-window.__user.accounts.push(data.account)
+    const input = document.querySelector("#code");
+    const code = input.value.trim();
+    const err = document.querySelector("#code-error");
+    if (!code || code === "" || code.length != 5 || isNaN(code)) {
+      err.innerHTML = "Please enter a valid OTP code";
+      err.classList.remove("hidden");
+      mainButton.hideProgress();
+      return;
+    }
+    err.classList.add("hidden");
+    const response = await fetch(`/verify-code`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        req_id: window.__code_id,
+        code,
+      }),
+    });
+    mainButton.hideProgress();
+    if (!response.ok) {
+      err.innerHTML = "An error occured. Try again later!";
+      err.classList.remove("hidden");
+      return;
+    }
+    const data = await response.json();
+    if (!data.success) {
+      err.innerHTML = data.error;
+      err.classList.remove("hidden");
+      return;
+    }
+    window.__user.accounts.push(data.account);
     input.value = "";
     window.__code_id = null;
     renderId("total_accounts", window.__user.accounts.length);
-      mainButton.hideProgress();
-      backButtonFunc();
+    mainButton.hideProgress();
+    backButtonFunc();
     return;
   }
 };
@@ -434,123 +495,124 @@ document.getElementById("user_id")?.addEventListener("touchend", () => {
   this.classList.remove("blue");
 });
 
+document
+  .getElementById("confirm_withdraw")
+  ?.addEventListener("click", async function () {
+    this.disabled = true;
+    this.innerHTML = "Processing...";
+    const address = document.getElementById("withdraw_address").value.trim();
+    const amount = document.getElementById("withdraw_amount").value.trim();
 
-document.getElementById('confirm_withdraw')?.addEventListener("click", async function (){
-  this.disabled = true;
-  this.innerHTML = "Processing...";
-  const address = document.getElementById('withdraw_address').value.trim();
-  const amount = document.getElementById('withdraw_amount').value.trim();
-  
-  if (!address || address == '' || address.length < 30){
+    if (!address || address == "" || address.length < 30) {
+      this.innerHTML = "Confirm Withdrawal";
+      this.disabled = false;
+      kingstar.showPopup({
+        title: "Withdraw error",
+        message: "Please enter a valid TRC20 address",
+      });
+      return;
+    }
+    if (!amount || amount == "" || isNaN(amount)) {
+      this.innerHTML = "Confirm Withdrawal";
+      this.disabled = false;
+      kingstar.showPopup({
+        title: "Withdraw error",
+        message: "Please enter a valid withdrawal amount",
+      });
+      return;
+    }
+    if (amount < 10) {
+      this.innerHTML = "Confirm Withdrawal";
+      this.disabled = false;
+      kingstar.showPopup({
+        title: "Withdraw error",
+        message: "Minimum withdrawal amount is 10 USDT",
+      });
+      return;
+    }
+    let balance = window.__user.balance || 0;
+    if (amount > balance) {
+      this.innerHTML = "Confirm Withdrawal";
+      this.disabled = false;
+      kingstar.showPopup({
+        title: "Withdraw error",
+        message: "Maximum withdrawal amount is " + balance + " USDT",
+      });
+      return;
+    }
+    const response = await fetch("/withdraw", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        address,
+        amount,
+      }),
+    });
+    if (!response.ok) {
+      this.innerHTML = "Confirm Withdrawal";
+      this.disabled = false;
+      kingstar.showPopup({
+        title: "Withdraw error",
+        message: "An error occured. Try again later!",
+      });
+      return;
+    }
+    const data = await response.json();
+    if (!data.success) {
+      this.innerHTML = "Confirm Withdrawal";
+      this.disabled = false;
+      kingstar.showPopup({
+        title: "Withdraw error",
+        message: data.error,
+      });
+      return;
+    }
     this.innerHTML = "Confirm Withdrawal";
     this.disabled = false;
     kingstar.showPopup({
-      title: "Withdraw error",
-      message: "Please enter a valid TRC20 address"
+      title: "Withdraw success",
+      message: "Withdrawal request has been successfully proccessed!",
     });
-    return;
-  };
-  if (!amount || amount == '' || isNaN(amount)){
-    this.innerHTML = "Confirm Withdrawal";
-    this.disabled = false;
-    kingstar.showPopup({
-      title: "Withdraw error",
-      message: "Please enter a valid withdrawal amount",
-    });
-    return;
-  };
-  if (amount < 10){
-    this.innerHTML = "Confirm Withdrawal";
-    this.disabled = false;
-    kingstar.showPopup({
-      title: "Withdraw error",
-      message: "Minimum withdrawal amount is 10 USDT",
-    });
-    return;
-  };
-  let balance = window.__user.balance || 0;
-  if (amount > balance){
-    this.innerHTML = "Confirm Withdrawal";
-    this.disabled = false;
-    kingstar.showPopup({
-      title: "Withdraw error",
-      message: "Maximum withdrawal amount is "+balance+" USDT",
-    });
-    return;
-  };
-  const response = await fetch("/withdraw", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      address,
-      amount
-    })
+    balance -= amount;
+    window.__user.balance = balance;
+    renderClass(
+      "balance",
+      balance.toLocaleString("en-us", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+    );
   });
-  if (!response.ok){
-    this.innerHTML = "Confirm Withdrawal";
-    this.disabled = false;
-    kingstar.showPopup({
-      title: "Withdraw error",
-      message: "An error occured. Try again later!",
-    });
-    return;
-  };
-  const data = await response.json();
-  if (!data.success){
-    this.innerHTML = "Confirm Withdrawal";
-    this.disabled = false;
-    kingstar.showPopup({
-      title: "Withdraw error",
-      message: data.error,
-    });
-    return;
-  };
-  this.innerHTML = "Confirm Withdrawal";
-  this.disabled = false;
-  kingstar.showPopup({
-    title: "Withdraw success",
-    message: "Withdrawal request has been successfully proccessed!",
-  });
-  balance -= amount;
-  window.__user.balance = balance;
-  renderClass("balance", balance.toLocaleString('en-us',{
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }));
-});
-
 
 const renderUser = () => {
   const user = window.__user;
   if (!user) return alert("User not found to render!");
   const { balance, accounts } = user;
   const { id, first_name, last_name, username, photo_url } = user.userDetails;
-  renderId("dp", photo_url,"src");
+  renderId("dp", photo_url, "src");
   renderId("user_id", `AccountID: ${id}`);
   renderId("name", `${first_name} ${last_name}`);
-  renderClass("balance", balance.toLocaleString('en-us',{
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }));
+  renderClass(
+    "balance",
+    balance.toLocaleString("en-us", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  );
   renderId("total_accounts", accounts.length);
 };
-  
 
-  
 const initApp = async () => {
   try {
-    const initData =
-      kingstar.initData ||
-      "user=%7B%22id%22%3A7911459703%2C%22first_name%22%3A%22Kingstar%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22gill728%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FUlUpXd_GVyhLD6ErkbkPzxwNPdXBAZc8e36fQzmGpOXY0EK8N_M_illvi5xi8s48.svg%22%7D&chat_instance=-6480699869963462083&chat_type=sender&auth_date=1767783522&signature=5qABDzHljuc-PRTepbywLYUULq6pNQ6eCJl1oFJjB7mIor3ENfJyUrYVO3bTaXjrztryGO9MwI1KmPGzO_0cBg&hash=4ea2d6418bb0b5a702e29d0200906031c4a2c2263e07ad50cda6bbe19b95d623";
-    
-    const response = await fetch("https://431bf75a-eb44-4325-8ce7-6eda385c6fea-00-1avnghaousmtr.spock.replit.dev/me", {
+    const initData = kingstar.initData;
+    const response = await fetch("/me", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ initData })
+      body: JSON.stringify({ initData }),
     });
     if (!response.ok) {
       alert("Error fetching user data");
@@ -558,21 +620,22 @@ const initApp = async () => {
     }
     const data = await response.json();
     if (!data.success) {
-      if (data.error === "No upline"){
+      if (data.error === "No upline") {
         kingstar.showPopup({
           title: "Join Notice",
-          message: "🥲 Currently, only users with a referral link can access this Bot. Please ask with your referrer for link to continue.",
+          message:
+            "🥲 Currently, only users with a referral link can access this Bot. Please ask with your referrer for link to continue.",
           buttons: [
             {
               type: "destructive",
               text: "Cancel",
             },
           ],
-        })
+        });
         await kingstar.close();
         return;
-      };
-      if (data.error === "Invalid upline"){
+      }
+      if (data.error === "Invalid upline") {
         kingstar.showPopup({
           title: "Invalid Upline",
           message: "🥲 Sorry, your referrer link is not valid!",
@@ -582,24 +645,16 @@ const initApp = async () => {
               text: "Cancel",
             },
           ],
-        })
+        });
         await kingstar.close();
         return;
-      };
+      }
       alert(data.error);
       return;
     }
-    data.user.userDetails = kingstar
-        ?.initDataUnsafe?.user || {
-        id: 7911459703,
-        first_name: "Kingstar",
-        last_name: "",
-        username: "gill728",
-        photo_url:
-          "https://t.me/i/userpic/320/UlUpXd_GVyhLD6ErkbkPzxwNPdXBAZc8e36fQzmGpOXY0EK8N_M_illvi5xi8s48.svg",
-      };
+    data.user.userDetails = kingstar?.initDataUnsafe?.user;
     window.__user = data.user;
-    renderUser(); 
+    renderUser();
     loadingPage.style.display = "none";
     mainPage.style.display = "block";
   } catch (e) {
@@ -615,4 +670,7 @@ setInterval(() => {
     document.body.classList.remove("dark");
   }
 }, 100);
-initApp();
+
+if (kingstar.initData) {
+  initApp();
+}
